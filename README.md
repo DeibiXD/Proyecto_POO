@@ -1,5 +1,5 @@
-﻿# Proyecto_POO
+﻿# Proyecto_POO 
 
-**Integrantes del grupo**/
+**Integrantes del grupo** \
 *David Fernando Parada Matute*   
 *Rigoberto Jose Guillen*
