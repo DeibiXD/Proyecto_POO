@@ -1,8 +1,8 @@
--- Create the database
+-- Crear Base de Datos
 CREATE DATABASE proyecto_poo;
 USE proyecto_poo;
 
--- Table: Direccion
+
 CREATE TABLE Direccion (
     idDireccion INT PRIMARY KEY AUTO_INCREMENT,
     pais VARCHAR(20),
@@ -24,7 +24,6 @@ CREATE TABLE Cliente (
     sueldo DECIMAL(14,2)
 );
 
--- Table: Prestamos
 CREATE TABLE Prestamos (
     idPrestamo INT PRIMARY KEY AUTO_INCREMENT,
     monto DECIMAL(14,2),
@@ -35,7 +34,6 @@ CREATE TABLE Prestamos (
     tipoPrestamo CHAR(1)
 );
 
--- Table: cliente_prestamos (Relationship table for Cliente and Prestamos)
 CREATE TABLE cliente_prestamos (
     dni VARCHAR(20),
     idPrestamo INT,
@@ -44,7 +42,6 @@ CREATE TABLE cliente_prestamos (
     FOREIGN KEY (idPrestamo) REFERENCES Prestamos(idPrestamo) ON DELETE CASCADE
 );
 
--- Table: tabla_amortizacion
 CREATE TABLE tabla_amortizacion (
     idPrestamo INT,
     numeroCuota INT,
