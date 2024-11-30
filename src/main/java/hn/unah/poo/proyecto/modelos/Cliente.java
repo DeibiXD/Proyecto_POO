@@ -1,5 +1,6 @@
 package hn.unah.poo.proyecto.modelos;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
@@ -18,6 +19,7 @@ import lombok.Setter;
 public class Cliente {
     
     @Id
+    @Column(length = 20, nullable = false)
     private String dni;
 
     private String nombre;
