@@ -2,6 +2,7 @@ package hn.unah.poo.proyecto.modelos;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "proyecto_poo")
+@Table(name = "cliente")
 public class Cliente {
     
     @Id
@@ -28,4 +29,7 @@ public class Cliente {
     private String correo;
 
     private double sueldo;
+
+    @OneToOne(mappedBy = "cliente")
+    private Direccion direccion;
 }

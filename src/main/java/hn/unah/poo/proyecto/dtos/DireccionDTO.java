@@ -9,22 +9,21 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClienteDTO {
+public class DireccionDTO {
+
+   
+    private int idDireccion;
+
+    private String pais;
+
+    private String departamento;
+
+    private String ciudad;
+
+    private String referencia;
+
     
-    
-    private String dni;
-
-    private String nombre;
-
-    private String apellido;
-
-    private String telefono;
-
-    private String correo;
-
-    private double sueldo;
-
-
-
     
 }
+    
+
