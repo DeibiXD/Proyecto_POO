@@ -35,17 +35,18 @@ public class ClienteServicios {
         return "Cliente almacenado satisfactoriamente";
     }
 
-    public Optional<ClienteDTO> obtenerPorDni(String dni){
+    public ClienteDTO obtenerPorDni(String dni){
         modelMapper = new ModelMapper();
         Optional<Cliente> cliente = clienteRepositorio.findById(dni);
-        ClienteDTO clienteDto =  this.modelMapper.map(cliente, ClienteDTO.class);
-
-        Direccion direccion = cliente.get().getDireccion();
-        DireccionDTO direccionDTO = this.modelMapper.map(direccion, DireccionDTO.class);
-        clienteDto.setDireccionDTO(direccionDTO);
-
-        
-        return Optional.ofNullable(clienteDto) ;
+        if (cliente.isPresent()){
+            Cliente clienteAgregar = cliente.get();
+            ClienteDTO clienteDto =  this.modelMapper.map(clienteAgregar, ClienteDTO.class);
+            Direccion direccion = cliente.get().getDireccion();
+            DireccionDTO direccionDTO = this.modelMapper.map(direccion, DireccionDTO.class);
+            clienteDto.setDireccionDTO(direccionDTO);
+            return clienteDto;
+        }
+       return null;
     }
 
     public List<ClienteDTO> obtenerTodos(){

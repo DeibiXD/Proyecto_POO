@@ -1,7 +1,6 @@
 package hn.unah.poo.proyecto.controladores;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +26,7 @@ public class ClienteControlador {
     }
     
      @GetMapping("/obtener/dni")
-    public Optional<ClienteDTO> obtenerPorId(@RequestParam(name="dni") String dni) {
+    public ClienteDTO obtenerPorId(@RequestParam(name="dni") String dni) {
         return this.clienteServicios.obtenerPorDni(dni);
         
 }

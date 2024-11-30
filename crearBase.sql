@@ -1,3 +1,4 @@
+-- Active: 1732922439982@@127.0.0.1@3306@proyecto_poo
 -- Crear Base de Datos
 CREATE DATABASE proyecto_poo;
 USE proyecto_poo;
@@ -49,9 +50,13 @@ CREATE TABLE tabla_amortizacion (
     capital DECIMAL(14,2),
     saldo DECIMAL(14,2),
     fechaVencimiento DATE,
+    id_tabla_amortizacion INT,
+    PRIMARY KEY (id_tabla_amortizacion)
     FOREIGN KEY (idPrestamo) REFERENCES prestamos(idPrestamo) ON DELETE CASCADE
 );
 
-SELECT * FROM cliente
+SELECT * FROM cliente;
+
+SELECT * FROM tabla_amortizacion;
 
 RENAME TABLE `proyecto_poo`.`Prestamos` TO `proyecto_poo`.`prestamos`;

@@ -32,6 +32,5 @@ build/
 ### VS Code ###
 .vscode/
 
-## application.properties y pom.xml
-src/main/resources/application.properties
-pom.xml
+## application.properties
+src/main/resources/
