@@ -11,6 +11,7 @@ import hn.unah.poo.proyecto.dtos.ClienteDTO;
 import hn.unah.poo.proyecto.dtos.DireccionDTO;
 import hn.unah.poo.proyecto.modelos.Cliente;
 import hn.unah.poo.proyecto.modelos.Direccion;
+import hn.unah.poo.proyecto.modelos.Prestamos;
 import hn.unah.poo.proyecto.repositorios.ClienteRepositorio;
 
 
@@ -38,10 +39,11 @@ public class ClienteServicios {
         Optional<Cliente> cliente = clienteRepositorio.findById(dni);
         if (cliente.isPresent()){
             Cliente clienteAgregar = cliente.get();
-            ClienteDTO clienteDto =  this.modelMapper.map(clienteAgregar, ClienteDTO.class);
-            Direccion direccion = cliente.get().getDireccion();
-            DireccionDTO direccionDTO = this.modelMapper.map(direccion, DireccionDTO.class);
-            System.out.println(clienteDto.toString() + direccionDTO.toString());
+            //ClienteDTO clienteDto =  this.modelMapper.map(clienteAgregar, ClienteDTO.class);
+            //Direccion direccion = cliente.get().getDireccion();
+            //DireccionDTO direccionDTO = this.modelMapper.map(direccion, DireccionDTO.class);
+            //System.out.println(clienteDto.toString() + direccionDTO.toString());
+            
             return clienteAgregar;
         }
        return null;

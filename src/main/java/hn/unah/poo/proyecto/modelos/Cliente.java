@@ -49,6 +49,5 @@ public class Cliente {
         joinColumns = { @JoinColumn(name="dni")},
         inverseJoinColumns = {@JoinColumn(name="idprestamo")}
     )
-    @JsonIgnore
     private List<Prestamos> prestamos;
 }
