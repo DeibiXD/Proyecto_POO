@@ -13,6 +13,7 @@ import hn.unah.poo.proyecto.dtos.DireccionDTO;
 import hn.unah.poo.proyecto.modelos.Cliente;
 import hn.unah.poo.proyecto.modelos.Direccion;
 import hn.unah.poo.proyecto.repositorios.ClienteRepositorio;
+import hn.unah.poo.proyecto.repositorios.DireccionRepositorio;
 
 
 @Service
@@ -28,14 +29,13 @@ public class ClienteServicios {
         if(this.clienteRepositorio.existsById(nvoCliente.getDni())){
             return "Ya existe el cliente";
         }
-        modelMapper = new ModelMapper();        
+        modelMapper = new ModelMapper(); 
         Cliente nvoClienteBd = this.modelMapper.map(nvoCliente, Cliente.class);
-        
         this.clienteRepositorio.save(nvoClienteBd);
         return "Cliente almacenado satisfactoriamente";
     }
 
-    public ClienteDTO obtenerPorDni(String dni){
+    public Cliente obtenerPorDni(String dni){
         modelMapper = new ModelMapper();
         Optional<Cliente> cliente = clienteRepositorio.findById(dni);
         if (cliente.isPresent()){
@@ -43,26 +43,13 @@ public class ClienteServicios {
             ClienteDTO clienteDto =  this.modelMapper.map(clienteAgregar, ClienteDTO.class);
             Direccion direccion = cliente.get().getDireccion();
             DireccionDTO direccionDTO = this.modelMapper.map(direccion, DireccionDTO.class);
-            clienteDto.setDireccionDTO(direccionDTO);
-            return clienteDto;
+            System.out.println(clienteDto.toString() + direccionDTO.toString());
+            return clienteAgregar;
         }
        return null;
     }
 
-    public List<ClienteDTO> obtenerTodos(){
-        modelMapper = new ModelMapper();
-        
-        List<Cliente> clientes = clienteRepositorio.findAll();
-        List <ClienteDTO> clientesDTO= new ArrayList<>();
-        for (Cliente cliente : clientes) {
-            ClienteDTO clienteDTO = modelMapper.map(cliente, ClienteDTO.class);
-            clientesDTO.add(clienteDTO);
-        }
-        
-        
-        return clientesDTO; 
-
-        
-    }
-    
+    public List<Cliente> obtenerTodos(){
+        return clienteRepositorio.findAll();
+}
 }

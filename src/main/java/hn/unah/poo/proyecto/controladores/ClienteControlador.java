@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import hn.unah.poo.proyecto.dtos.ClienteDTO;
+import hn.unah.poo.proyecto.modelos.Cliente;
 import hn.unah.poo.proyecto.servicios.ClienteServicios;
 
 @RestController
@@ -26,13 +27,13 @@ public class ClienteControlador {
     }
     
      @GetMapping("/obtener/dni")
-    public ClienteDTO obtenerPorId(@RequestParam(name="dni") String dni) {
+    public Cliente obtenerPorId(@RequestParam(name="dni") String dni) {
         return this.clienteServicios.obtenerPorDni(dni);
         
 }
 
     @GetMapping("/obtener")
-        public List<ClienteDTO> obtenerTodos(){
+        public List<Cliente> obtenerTodos(){
         return this.clienteServicios.obtenerTodos();
         }
 

@@ -55,7 +55,7 @@ CREATE TABLE tabla_amortizacion (
     FOREIGN KEY (idPrestamo) REFERENCES prestamos(idPrestamo) ON DELETE CASCADE
 );
 
-SELECT * FROM cliente;
+SELECT * FROM direccion;
 
 SELECT * FROM tabla_amortizacion;
 

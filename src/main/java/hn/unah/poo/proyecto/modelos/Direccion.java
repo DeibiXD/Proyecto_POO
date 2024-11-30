@@ -1,5 +1,7 @@
 package hn.unah.poo.proyecto.modelos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,6 +39,7 @@ public class Direccion {
 
     @OneToOne(cascade =  CascadeType.ALL)
     @JoinColumn(name = "dni", referencedColumnName = "dni")
+    @JsonIgnore
     private Cliente cliente;
 
     

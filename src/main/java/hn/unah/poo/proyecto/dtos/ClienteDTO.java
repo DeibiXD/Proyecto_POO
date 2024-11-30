@@ -24,7 +24,7 @@ public class ClienteDTO {
 
     private double sueldo;
 
-    private DireccionDTO direccionDTO;
+   
 
     
 }
