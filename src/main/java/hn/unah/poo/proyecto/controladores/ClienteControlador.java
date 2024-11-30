@@ -1,5 +1,6 @@
 package hn.unah.poo.proyecto.controladores;
 
+<<<<<<< HEAD
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,4 +23,8 @@ public class ClienteControlador {
     }
     
 
+=======
+public class ClienteControlador {
+    
+>>>>>>> f0a38e9b069671a5b4ab0251d0873b3d0cf4c0f4
 }

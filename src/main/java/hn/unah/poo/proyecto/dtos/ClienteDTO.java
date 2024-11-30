@@ -1,5 +1,6 @@
 package hn.unah.poo.proyecto.dtos;
 
+<<<<<<< HEAD
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,4 +28,8 @@ public class ClienteDTO {
 
 
     
+=======
+public class ClienteDTO {
+    
+>>>>>>> f0a38e9b069671a5b4ab0251d0873b3d0cf4c0f4
 }
