@@ -3,6 +3,7 @@ package hn.unah.poo.proyecto.modelos;
 import java.math.BigDecimal;
 import java.util.List;
 
+import hn.unah.poo.proyecto.Enums.tipoPrestamoEnum;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -39,7 +40,7 @@ public class Prestamos {
     private char estado;
 
     @Column(name = "tipoprestamo")
-    private char tipoPrestamo;
+    private tipoPrestamoEnum tipoPrestamo;
 
     @OneToMany(mappedBy = "prestamos")
     private List<Tabla_Amortizacion> tabla_amortizacion;

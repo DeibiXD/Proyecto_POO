@@ -1,6 +1,5 @@
 package hn.unah.poo.proyecto.servicios;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,7 +12,6 @@ import hn.unah.poo.proyecto.dtos.DireccionDTO;
 import hn.unah.poo.proyecto.modelos.Cliente;
 import hn.unah.poo.proyecto.modelos.Direccion;
 import hn.unah.poo.proyecto.repositorios.ClienteRepositorio;
-import hn.unah.poo.proyecto.repositorios.DireccionRepositorio;
 
 
 @Service

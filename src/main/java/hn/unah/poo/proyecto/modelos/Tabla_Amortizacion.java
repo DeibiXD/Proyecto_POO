@@ -26,6 +26,7 @@ import lombok.Setter;
 public class Tabla_Amortizacion {
     
     @Id
+    @Column(name = "id_tabla_amortizacion")
     private int idTablaAmortizacion;
 
     @Column(name = "numerocuota")
