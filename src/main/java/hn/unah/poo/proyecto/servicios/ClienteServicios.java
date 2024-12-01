@@ -16,6 +16,7 @@ import hn.unah.poo.proyecto.modelos.Direccion;
 import hn.unah.poo.proyecto.modelos.Prestamos;
 import hn.unah.poo.proyecto.repositorios.ClienteRepositorio;
 import hn.unah.poo.proyecto.repositorios.DireccionRepositorio;
+import hn.unah.poo.proyecto.repositorios.PrestamosRepositorio;
 
 
 @Service
@@ -29,6 +30,9 @@ public class ClienteServicios {
 
     @Autowired
     private DireccionRepositorio direccionRepositorio;
+
+    @Autowired
+    private PrestamosRepositorio prestamosRepositorio;
 
     public String crearCliente(ClienteDTO clienteDTO){        
         if(this.clienteRepositorio.existsById(clienteDTO.getDni())){
@@ -75,10 +79,15 @@ public class ClienteServicios {
             for (PrestamosDTO prestamosDTO : clienteDTO.getPrestamosDTO()) {
                 modelMapper = new ModelMapper();
                 listaPrestamos.add(modelMapper.map(prestamosDTO, Prestamos.class));
+
             }
-            cliente.setPrestamos(listaPrestamos);
+            
             direccion.setCliente(cliente);
-            direccionRepositorio.save(direccion);
+            direccionRepositorio.saveAndFlush(direccion);
+            cliente.setPrestamos(listaPrestamos);
+            prestamosRepositorio.saveAllAndFlush(listaPrestamos);
+            clienteRepositorio.saveAndFlush(cliente);
+
             return "Cliente Agregado con direccion y lista de prestamos";
         }
         modelMapper = new ModelMapper();
