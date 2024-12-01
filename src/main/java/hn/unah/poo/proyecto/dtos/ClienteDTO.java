@@ -1,5 +1,8 @@
 package hn.unah.poo.proyecto.dtos;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,9 +25,11 @@ public class ClienteDTO {
 
     private String correo;
 
-    private double sueldo;
+    private BigDecimal sueldo;
 
-   
+    private DireccionDTO direccionDTO;
+
+    private List<PrestamosDTO> prestamosDTO;
 
     
 }

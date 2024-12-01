@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
-@RequestMapping("/api/prestamoos")
+@RequestMapping("/api/prestamos")
 public class PrestamosControlador {
     
     @Autowired
@@ -27,13 +27,21 @@ public class PrestamosControlador {
     }
 
     @GetMapping("/buscar/dni")
-    public Prestamos buscarPorDni(@RequestParam String dni) {
+    public Prestamos buscarPorDni(@RequestParam(name = "dni") String dni) {
         return prestamosServicios.buscarPorDni(dni);
     }
 
     @GetMapping("/buscar/id")
-    public Prestamos buscarPorId(@RequestParam int id) {
+    public Prestamos buscarPorId(@RequestParam(name = "id") int id) {
         return prestamosServicios.buscarPorId(id);
+    }
+    
+    @PostMapping("/agregar/cliente")
+    public String agregarPrestamoExistente_A_Cliente(
+        @RequestParam(name="dni") String dni,
+        @RequestParam(name="id")int idPrestamo) {
+        
+        return prestamosServicios.agregarPrestamoExistente_A_Cliente(dni,idPrestamo) ;
     }
     
     

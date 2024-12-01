@@ -11,18 +11,15 @@ import lombok.Setter;
 @NoArgsConstructor
 public class DireccionDTO {
 
-   
-    private int idDireccion;
-
     private String pais;
 
     private String departamento;
 
     private String ciudad;
 
-    private String referencia;
+    private String colonia;
 
-    
+    private String referencia;
     
 }
     
