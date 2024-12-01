@@ -1,9 +1,11 @@
 package hn.unah.poo.proyecto.servicios;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import hn.unah.poo.proyecto.dtos.PrestamosDTO;
@@ -23,6 +25,15 @@ public class PrestamosServicios {
 
     ModelMapper modelMapper;
 
+    @Value("${prestamos.tasa.vehicula}")
+    private BigDecimal tasaVehicular;
+
+    @Value("${prestamos.tasa.personal}")
+    private BigDecimal tasaPersonal;
+
+    @Value("${prestamos.tasa.hipotecario}")
+    private BigDecimal tasaHipotecario;
+
    
     public List<Prestamos> buscarPorDni(String dni) {
         return prestamosRepositorio.findPrestamosByClienteDni(dni);
@@ -40,6 +51,18 @@ public class PrestamosServicios {
     public String crearPrestamos(PrestamosDTO prestamosDTO, String dni) {
         modelMapper = new ModelMapper();
         Prestamos prestamosParaAgregar = modelMapper.map(prestamosDTO, Prestamos.class);
+        switch (prestamosDTO.getTipoPrestamo()) {
+            case V:
+                prestamosParaAgregar.setTasa_interes(tasaVehicular);
+                break;
+        
+            case P:
+                prestamosParaAgregar.setTasa_interes(tasaPersonal);
+                break;
+
+            case H:
+                prestamosParaAgregar.setTasa_interes(tasaHipotecario);
+        }
         prestamosRepositorio.saveAndFlush(prestamosParaAgregar);
         if (clienteRepositorio.existsById(dni)){
             Cliente cliente = clienteRepositorio.findById(dni).get();
@@ -60,6 +83,4 @@ public class PrestamosServicios {
         return "No existe una de las entidades";
     }
 
-
-    
 }

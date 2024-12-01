@@ -17,8 +17,6 @@ public class PrestamosDTO {
 
     private int plazo;
 
-    private BigDecimal tasa_interes;
-
     private BigDecimal cuota;
 
     private char estado;

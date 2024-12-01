@@ -46,6 +46,10 @@ public class PrestamosControlador {
         return prestamosServicios.agregarPrestamoExistente_A_Cliente(dni,idPrestamo) ;
     }
     
+    @GetMapping("/obtener/saldo")
+    public String getMethodName(@RequestParam String param) {
+        return new String();
+    }
     
     
 }
