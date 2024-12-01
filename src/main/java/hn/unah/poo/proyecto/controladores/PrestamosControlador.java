@@ -1,5 +1,7 @@
 package hn.unah.poo.proyecto.controladores;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,7 +29,7 @@ public class PrestamosControlador {
     }
 
     @GetMapping("/buscar/dni")
-    public Prestamos buscarPorDni(@RequestParam(name = "dni") String dni) {
+    public List<Prestamos> buscarPorDni(@RequestParam(name = "dni") String dni) {
         return prestamosServicios.buscarPorDni(dni);
     }
 

@@ -1,5 +1,6 @@
 package hn.unah.poo.proyecto.servicios;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
@@ -24,14 +25,14 @@ public class PrestamosServicios {
     ModelMapper modelMapper;
 
    
-    public Prestamos buscarPorDni(String dni) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'buscarPorDni'");
+    public List<Prestamos> buscarPorDni(String dni) {
+        return prestamosRepositorio.findPrestamosByClienteDni(dni);
     }
 
     public Prestamos buscarPorId(int id) {
-        // TODO Auto-generated method stub
+
         throw new UnsupportedOperationException("Unimplemented method 'buscarPorId'");
+
     }
 
     public String crearPrestamos(PrestamosDTO prestamosDTO) {
