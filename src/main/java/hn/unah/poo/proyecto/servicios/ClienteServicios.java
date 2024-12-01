@@ -38,11 +38,12 @@ public class ClienteServicios {
         modelMapper = new ModelMapper();
         Optional<Cliente> cliente = clienteRepositorio.findById(dni);
         if (cliente.isPresent()){
+            
             Cliente clienteAgregar = cliente.get();
-            //ClienteDTO clienteDto =  this.modelMapper.map(clienteAgregar, ClienteDTO.class);
-            //Direccion direccion = cliente.get().getDireccion();
-            //DireccionDTO direccionDTO = this.modelMapper.map(direccion, DireccionDTO.class);
-            //System.out.println(clienteDto.toString() + direccionDTO.toString());
+            ClienteDTO clienteDto =  this.modelMapper.map(clienteAgregar, ClienteDTO.class);
+            Direccion direccion = cliente.get().getDireccion();
+            DireccionDTO direccionDTO = this.modelMapper.map(direccion, DireccionDTO.class);
+            System.out.println(clienteDto.toString() + direccionDTO.toString());
             
             return clienteAgregar;
         }
