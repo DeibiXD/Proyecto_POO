@@ -3,7 +3,7 @@ package hn.unah.poo.proyecto.modelos;
 import java.math.BigDecimal;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import hn.unah.poo.proyecto.Enums.tipoPrestamoEnum;
 import jakarta.persistence.Column;
@@ -54,6 +54,6 @@ public class Prestamos {
     private List<Tabla_Amortizacion> tabla_amortizacion;
 
     @ManyToMany(mappedBy = "prestamos")
-    @JsonIgnore
+    @JsonIgnoreProperties({"prestamos"})
     private List<Cliente> clientes;
 }

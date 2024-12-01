@@ -24,8 +24,8 @@ public class PrestamosControlador {
     private PrestamosServicios prestamosServicios;
 
     @PostMapping("/crear")
-    public String crearPrestamos(@RequestBody PrestamosDTO prestamosDTO) {
-        return prestamosServicios.crearPrestamos(prestamosDTO);
+    public String crearPrestamos(@RequestBody PrestamosDTO prestamosDTO, @RequestParam(name = "dni",defaultValue = "0")String dni) {
+        return prestamosServicios.crearPrestamos(prestamosDTO,dni);
     }
 
     @GetMapping("/buscar/dni")

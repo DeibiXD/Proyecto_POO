@@ -3,7 +3,7 @@ package hn.unah.poo.proyecto.modelos;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -45,7 +45,7 @@ public class Tabla_Amortizacion {
 
     @ManyToOne
     @JoinColumn(name = "idprestamo", referencedColumnName = "idprestamo")
-    @JsonIgnore
+    @JsonIgnoreProperties({"tabla_amortizacion"})
     private Prestamos prestamos;
     
 }

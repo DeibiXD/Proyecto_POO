@@ -32,11 +32,14 @@ public class ClienteServicios {
 
     @Autowired
     private PrestamosRepositorio prestamosRepositorio;
-
-    public String crearCliente(ClienteDTO clienteDTO){        
+    
+    public String crearCliente(ClienteDTO clienteDTO){  
         if(this.clienteRepositorio.existsById(clienteDTO.getDni())){
             return "Ya existe el cliente";
-        } else if (clienteDTO.getDireccionDTO()!=null && clienteDTO.getPrestamosDTO().isEmpty()){
+        } else if (
+        clienteDTO.getDireccionDTO()!=null && 
+        clienteDTO.getPrestamosDTO().isEmpty())
+        {
           Cliente cliente = new Cliente();
         cliente.setDni(clienteDTO.getDni());
         cliente.setNombre(clienteDTO.getNombre());
@@ -57,7 +60,9 @@ public class ClienteServicios {
 
 
         return "Cliente creado \n Direccion Agregada";
-        } else if (clienteDTO.getDireccionDTO()!=null && !clienteDTO.getPrestamosDTO().isEmpty()){
+        } else if (
+            clienteDTO.getDireccionDTO()!=null && 
+            !clienteDTO.getPrestamosDTO().isEmpty()){
             Cliente cliente = new Cliente();
             cliente.setDni(clienteDTO.getDni());
             cliente.setNombre(clienteDTO.getNombre());
