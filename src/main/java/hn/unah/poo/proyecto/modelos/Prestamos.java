@@ -42,7 +42,7 @@ public class Prestamos {
     private int plazo;
 
     @Column(name = "tasa_interes")
-    //Por Formula
+    //Por Selecion de tipo prestamo de enum
     private BigDecimal tasa_interes;
 
     //Por Formula

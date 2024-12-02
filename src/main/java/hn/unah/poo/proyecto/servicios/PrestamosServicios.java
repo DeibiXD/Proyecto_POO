@@ -1,6 +1,8 @@
 package hn.unah.poo.proyecto.servicios;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -58,7 +60,9 @@ public class PrestamosServicios {
 
     public String crearPrestamos(PrestamosDTO prestamosDTO, String dni) {
         modelMapper = new ModelMapper();
+        if(prestamosDTO.getPlazo()>=1){
         Prestamos prestamosParaAgregar = modelMapper.map(prestamosDTO, Prestamos.class);
+        
         switch (prestamosDTO.getTipoPrestamo()) {
             case V:
                 prestamosParaAgregar.setTasa_interes(tasaVehicular);
@@ -72,7 +76,46 @@ public class PrestamosServicios {
                 prestamosParaAgregar.setTasa_interes(tasaHipotecario);
         }
         prestamosParaAgregar.setCuota(calcularCuota(prestamosParaAgregar));
-        prestamosRepositorio.saveAndFlush(prestamosParaAgregar);
+        List<Tabla_Amortizacion> creacionTabla = new ArrayList<>();
+        
+        //Logica para crear tabla de amortizacion
+        int cuotasTotales = prestamosDTO.getPlazo()*12;
+        //El primer registor
+        Tabla_Amortizacion primerRegistro = new Tabla_Amortizacion();
+        primerRegistro.setNumeroCuota(0);
+        primerRegistro.setInteres(BigDecimal.ZERO);
+        primerRegistro.setCapital(BigDecimal.ZERO);
+        primerRegistro.setSaldo(prestamosDTO.getMonto());
+        primerRegistro.setFechaVencimiento(LocalDate.now());
+        primerRegistro.setEstado('A');
+        primerRegistro.setPrestamos(prestamosParaAgregar);
+        creacionTabla.add(primerRegistro);
+
+        //El resto de los registros
+        for (int i=0; i<cuotasTotales;i++){
+            //Referencia al registor anterior
+            Tabla_Amortizacion registroAnterior = creacionTabla.get(i);
+            //Calculo de los atributos
+            BigDecimal interes = prestamosParaAgregar.getTasa_interes();
+            BigDecimal anio = new BigDecimal(12.0);
+            interes= interes.divide(anio,2,RoundingMode.HALF_UP);
+            interes = interes.multiply(registroAnterior.getSaldo());
+            BigDecimal capital = prestamosParaAgregar.getCuota().subtract(interes);
+            BigDecimal saldo = registroAnterior.getSaldo().subtract(capital);
+
+            Tabla_Amortizacion nuevoRegistro = new Tabla_Amortizacion();
+            nuevoRegistro.setCapital(capital);
+            nuevoRegistro.setFechaVencimiento(registroAnterior.getFechaVencimiento().plusMonths(1));
+            nuevoRegistro.setEstado('P');
+            nuevoRegistro.setInteres(interes);
+            nuevoRegistro.setNumeroCuota(i+1);
+            nuevoRegistro.setSaldo(saldo);
+            nuevoRegistro.setPrestamos(prestamosParaAgregar);
+            creacionTabla.add(nuevoRegistro);
+        }
+        //Agregar tabla a prestamos
+        amortizacionRepositorio.saveAllAndFlush(creacionTabla);
+
         if (clienteRepositorio.existsById(dni)){
             Cliente cliente = clienteRepositorio.findById(dni).get();
             cliente.getPrestamos().add(prestamosParaAgregar);
@@ -80,6 +123,8 @@ public class PrestamosServicios {
         }
 
         return "Agregado Correctamente";
+    }
+    return "No se pudo agregar este prestamo";
     }
     
     public BigDecimal calcularCuota(Prestamos prestamos){
@@ -148,4 +193,5 @@ public class PrestamosServicios {
         return "No encontramos el prestamo";
     }
 
+    
 }
