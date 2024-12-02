@@ -27,7 +27,7 @@ public class ClienteDTO {
 
     private BigDecimal sueldo;
 
-    private DireccionDTO direccionDTO;
+    private List<DireccionDTO> direccionDTO;
 
     private List<PrestamosDTO> prestamosDTO;
 

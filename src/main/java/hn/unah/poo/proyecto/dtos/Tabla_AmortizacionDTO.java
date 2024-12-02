@@ -16,8 +16,10 @@ public class Tabla_AmortizacionDTO {
    
    private BigDecimal interes;
 
+   //Cantidad de capital que hay que pagar en una cuota
    private BigDecimal capital;
 
+   //Saldo Restante para pagar el prestamo
    private BigDecimal saldo;
 
    private LocalDate fechaVencimiento;

@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -40,8 +41,8 @@ public class Cliente {
 
     private BigDecimal sueldo;
 
-    @OneToOne(mappedBy = "cliente")
-    private Direccion direccion;
+    @OneToMany(mappedBy = "cliente")
+    private List<Direccion> direccion;
 
     @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(

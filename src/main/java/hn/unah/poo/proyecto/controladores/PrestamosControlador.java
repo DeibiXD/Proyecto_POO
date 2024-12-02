@@ -47,9 +47,13 @@ public class PrestamosControlador {
     }
     
     @GetMapping("/obtener/saldo")
-    public String getMethodName(@RequestParam String param) {
-        return new String();
+    public String sumarPendientesCuotasDelPrestamo(@RequestParam(name = "id") int id) {
+        return prestamosServicios.sumarPendientesCuotasDelPrestamo(id);
     }
     
+    @PostMapping("/pagar/cuota")
+    public String pagarUltimaCuota(@RequestParam(name = "id")int id){
+        return prestamosServicios.pagarUltimaCuota(id);
+    }
     
 }

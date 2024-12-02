@@ -1,7 +1,10 @@
 package hn.unah.poo.proyecto.servicios;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import hn.unah.poo.proyecto.dtos.PrestamosDTO;
 import hn.unah.poo.proyecto.modelos.Prestamos;
+import hn.unah.poo.proyecto.modelos.Tabla_Amortizacion;
+import hn.unah.poo.proyecto.repositorios.AmortizacionRepositorio;
 import hn.unah.poo.proyecto.repositorios.ClienteRepositorio;
 import hn.unah.poo.proyecto.repositorios.PrestamosRepositorio;
 import hn.unah.poo.proyecto.modelos.Cliente;
@@ -22,6 +27,9 @@ public class PrestamosServicios {
 
     @Autowired
     private ClienteRepositorio clienteRepositorio;
+
+    @Autowired
+    private AmortizacionRepositorio amortizacionRepositorio;
 
     ModelMapper modelMapper;
 
@@ -81,6 +89,38 @@ public class PrestamosServicios {
             return "Se agrego prestamo a cliente";
         }
         return "No existe una de las entidades";
+    }
+
+    public String sumarPendientesCuotasDelPrestamo(int id) {
+        if(prestamosRepositorio.existsById(id)){
+        List<Tabla_Amortizacion> listaAmortizacions = prestamosRepositorio.findById(id).get().getTabla_amortizacion();
+        BigDecimal sumaTotal = BigDecimal.ZERO;
+        for (Tabla_Amortizacion elementosTabla_Amortizacion : listaAmortizacions) {
+            if (elementosTabla_Amortizacion.getEstado()=='P'){
+                sumaTotal = sumaTotal.add(elementosTabla_Amortizacion.getCapital());
+            }
+        }
+        return sumaTotal.toString();
+    }
+    return "Este prestamo no existe";
+    }
+
+    public String pagarUltimaCuota(int id) {
+        if(prestamosRepositorio.existsById(id)){
+            Prestamos prestamoAPagar = prestamosRepositorio.findById(id).get();
+            List<Tabla_Amortizacion> tablaDeCuotas = prestamoAPagar.getTabla_amortizacion();
+            Tabla_Amortizacion pagoMasReciente = tablaDeCuotas.stream()
+            .filter(tA -> tA.getEstado()=='P')
+            .max(Comparator.comparing(Tabla_Amortizacion::getFechaVencimiento).reversed())
+            .orElse(null); 
+            if (pagoMasReciente == null){
+                return "No hay pagos pendientes";
+            }
+            pagoMasReciente.setEstado('A');
+             amortizacionRepositorio.save(pagoMasReciente);
+             return "Se pago con exito";
+        }
+        return "No encontramos el prestamo";
     }
 
 }

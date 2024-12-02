@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import hn.unah.poo.proyecto.dtos.ClienteDTO;
+import hn.unah.poo.proyecto.dtos.DireccionDTO;
 import hn.unah.poo.proyecto.dtos.PrestamosDTO;
 import hn.unah.poo.proyecto.modelos.Cliente;
 import hn.unah.poo.proyecto.modelos.Direccion;
@@ -37,8 +38,10 @@ public class ClienteServicios {
         if(this.clienteRepositorio.existsById(clienteDTO.getDni())){
             return "Ya existe el cliente";
         } else if (
-        clienteDTO.getDireccionDTO()!=null && 
-        clienteDTO.getPrestamosDTO().isEmpty())
+            //Hay direccion no hay prestamos
+        !(clienteDTO.getDireccionDTO()==null) && 
+        clienteDTO.getPrestamosDTO()==null &&
+        clienteDTO.getDireccionDTO().size()<=2) 
         {
           Cliente cliente = new Cliente();
         cliente.setDni(clienteDTO.getDni());
@@ -48,21 +51,26 @@ public class ClienteServicios {
         cliente.setCorreo(clienteDTO.getCorreo());
         cliente.setSueldo(clienteDTO.getSueldo());
 
-        Direccion direccion = new Direccion();
-        direccion.setPais(clienteDTO.getDireccionDTO().getPais());
-        direccion.setDepartamento(clienteDTO.getDireccionDTO().getDepartamento());
-        direccion.setCiudad(clienteDTO.getDireccionDTO().getCiudad());
-        direccion.setColonia(clienteDTO.getDireccionDTO().getColonia());
-        direccion.setReferencia(clienteDTO.getDireccionDTO().getReferencia());
-
-        direccion.setCliente(cliente);
-        direccionRepositorio.save(direccion);
-
+        List<Direccion> direccion = new ArrayList<>();
+        
+            for (DireccionDTO direccionEnArray : clienteDTO.getDireccionDTO()) {
+                Direccion direccionFinal = new Direccion();
+                direccionFinal.setPais(direccionEnArray.getPais());
+                direccionFinal.setDepartamento(direccionEnArray.getDepartamento());
+                direccionFinal.setCiudad(direccionEnArray.getCiudad());
+                direccionFinal.setColonia(direccionEnArray.getColonia());
+                direccionFinal.setReferencia(direccionEnArray.getReferencia());
+                direccionFinal.setCliente(cliente);
+                direccion.add(direccionFinal);
+            }
+        
+        direccionRepositorio.saveAll(direccion);
 
         return "Cliente creado \n Direccion Agregada";
         } else if (
-            clienteDTO.getDireccionDTO()!=null && 
-            !clienteDTO.getPrestamosDTO().isEmpty()){
+            !(clienteDTO.getDireccionDTO()==null)&& 
+            !(clienteDTO.getPrestamosDTO()==null) &&
+            clienteDTO.getDireccionDTO().size()<=2){
             Cliente cliente = new Cliente();
             cliente.setDni(clienteDTO.getDni());
             cliente.setNombre(clienteDTO.getNombre());
@@ -71,12 +79,20 @@ public class ClienteServicios {
             cliente.setCorreo(clienteDTO.getCorreo());
             cliente.setSueldo(clienteDTO.getSueldo());
     
-            Direccion direccion = new Direccion();
-            direccion.setPais(clienteDTO.getDireccionDTO().getPais());
-            direccion.setDepartamento(clienteDTO.getDireccionDTO().getDepartamento());
-            direccion.setCiudad(clienteDTO.getDireccionDTO().getCiudad());
-            direccion.setColonia(clienteDTO.getDireccionDTO().getColonia());
-            direccion.setReferencia(clienteDTO.getDireccionDTO().getReferencia());
+            List<Direccion> direccion = new ArrayList<>();
+        
+            for (DireccionDTO direccionEnArray : clienteDTO.getDireccionDTO()) {
+                Direccion direccionFinal = new Direccion();
+                direccionFinal.setPais(direccionEnArray.getPais());
+                direccionFinal.setDepartamento(direccionEnArray.getDepartamento());
+                direccionFinal.setCiudad(direccionEnArray.getCiudad());
+                direccionFinal.setColonia(direccionEnArray.getColonia());
+                direccionFinal.setReferencia(direccionEnArray.getReferencia());
+                direccionFinal.setCliente(cliente);
+                direccion.add(direccionFinal);
+            }
+        
+        direccionRepositorio.saveAllAndFlush(direccion);
 
             List<Prestamos> listaPrestamos = new ArrayList<>();
 
@@ -85,14 +101,13 @@ public class ClienteServicios {
                 listaPrestamos.add(modelMapper.map(prestamosDTO, Prestamos.class));
 
             }
-            
-            direccion.setCliente(cliente);
-            direccionRepositorio.saveAndFlush(direccion);
             cliente.setPrestamos(listaPrestamos);
             prestamosRepositorio.saveAllAndFlush(listaPrestamos);
             clienteRepositorio.saveAndFlush(cliente);
 
             return "Cliente Agregado con direccion y lista de prestamos";
+        } else if (clienteDTO.getDireccionDTO().size()> 2){
+            return "Un cliente solo puede tener 2 direcciones";
         }
         modelMapper = new ModelMapper();
         Cliente clientaSimple = modelMapper.map(clienteDTO, Cliente.class);
