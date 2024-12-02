@@ -71,13 +71,38 @@ public class PrestamosServicios {
             case H:
                 prestamosParaAgregar.setTasa_interes(tasaHipotecario);
         }
+        prestamosParaAgregar.setCuota(calcularCuota(prestamosParaAgregar));
         prestamosRepositorio.saveAndFlush(prestamosParaAgregar);
         if (clienteRepositorio.existsById(dni)){
             Cliente cliente = clienteRepositorio.findById(dni).get();
             cliente.getPrestamos().add(prestamosParaAgregar);
             clienteRepositorio.save(cliente);
         }
+
         return "Agregado Correctamente";
+    }
+    
+    public BigDecimal calcularCuota(Prestamos prestamos){
+
+        double P = prestamos.getMonto().doubleValue();
+        double r = prestamos.getTasa_interes().doubleValue()/12.0;
+        double n = ((double)prestamos.getPlazo())*12.0;
+
+        double calculoCuota = (P*r*Math.pow(1+r, n))/(Math.pow(1+r, n)-1);
+
+        return new BigDecimal(calculoCuota);
+    }
+
+    public BigDecimal NivelEndeudamiento(String dni, List<Tabla_Amortizacion> tabla_Amortizacion){
+        List<Prestamos> listaDePrestamosAsociadasAlCliente = prestamosRepositorio.findPrestamosByClienteDni(dni);
+        BigDecimal totalEgresos = BigDecimal.ZERO;
+        Cliente clienteParaCalcularSueldo= clienteRepositorio.findById(dni).orElseThrow(() -> new IllegalArgumentException("No existe el Cliente"));
+        for (Prestamos prestamosAsociados : listaDePrestamosAsociadasAlCliente) {
+            totalEgresos = totalEgresos.add(prestamosAsociados.getCuota());
+        }
+        BigDecimal nivelEndeudamiento = totalEgresos.divide(clienteParaCalcularSueldo.getSueldo());
+
+        return nivelEndeudamiento;
     }
 
     public String agregarPrestamoExistente_A_Cliente(String dni, int idPrestamo) {

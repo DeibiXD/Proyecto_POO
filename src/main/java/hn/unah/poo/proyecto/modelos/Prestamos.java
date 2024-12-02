@@ -21,6 +21,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "prestamos")
@@ -28,22 +29,26 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-
+@ToString
 public class Prestamos {
     @Id
     @Column(name = "idprestamo")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idPrestamo;
-
+    //El monto total para pagar el prestamo
     private BigDecimal monto;
 
+    //Este valor es en anios
     private int plazo;
 
     @Column(name = "tasa_interes")
+    //Por Formula
     private BigDecimal tasa_interes;
 
+    //Por Formula
     private BigDecimal cuota;
 
+    //Es P si quedan pagos, es A si ya estan todos pagodos
     private char estado;
 
     @Column(name = "tipoprestamo")

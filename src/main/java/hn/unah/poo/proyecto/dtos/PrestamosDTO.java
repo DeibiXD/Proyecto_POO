@@ -14,10 +14,8 @@ import lombok.Setter;
 public class PrestamosDTO {
     
     private BigDecimal monto;
-
+    //En Anios
     private int plazo;
-
-    private BigDecimal cuota;
 
     private char estado;
 

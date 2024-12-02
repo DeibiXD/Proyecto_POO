@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "tabla_amortizacion")
@@ -22,7 +23,7 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-
+@ToString
 public class Tabla_Amortizacion {
     
     @Id
@@ -30,10 +31,13 @@ public class Tabla_Amortizacion {
     private int idTablaAmortizacion;
 
     @Column(name = "numerocuota")
+    //Plazo de prestamo * 12
+    //Inician en 0
     private int numeroCuota;
 
     private BigDecimal interes;
 
+    //Siempre es majos que interes
     private BigDecimal capital;
 
     private BigDecimal saldo;
