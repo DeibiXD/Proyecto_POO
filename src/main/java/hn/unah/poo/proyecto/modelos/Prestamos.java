@@ -6,6 +6,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import hn.unah.poo.proyecto.Enums.tipoPrestamoEnum;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -55,7 +56,7 @@ public class Prestamos {
     @Enumerated(EnumType.STRING)
     private tipoPrestamoEnum tipoPrestamo;
 
-    @OneToMany(mappedBy = "prestamos")
+    @OneToMany(mappedBy = "prestamos",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Tabla_Amortizacion> tabla_amortizacion;
 
     @ManyToMany(mappedBy = "prestamos")

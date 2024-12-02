@@ -5,8 +5,11 @@ import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -28,6 +31,7 @@ public class Tabla_Amortizacion {
     
     @Id
     @Column(name = "id_tabla_amortizacion")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idTablaAmortizacion;
 
     @Column(name = "numerocuota")
@@ -47,7 +51,7 @@ public class Tabla_Amortizacion {
     @Column(name = "fechavencimiento")
     private LocalDate fechaVencimiento;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "idprestamo", referencedColumnName = "idprestamo")
     @JsonIgnoreProperties({"tabla_amortizacion"})
     private Prestamos prestamos;

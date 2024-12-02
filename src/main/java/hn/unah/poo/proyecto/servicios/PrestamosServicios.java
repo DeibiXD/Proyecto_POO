@@ -59,8 +59,8 @@ public class PrestamosServicios {
     }
 
     public String crearPrestamos(PrestamosDTO prestamosDTO, String dni) {
-        modelMapper = new ModelMapper();
         if(prestamosDTO.getPlazo()>=1){
+        modelMapper = new ModelMapper();
         Prestamos prestamosParaAgregar = modelMapper.map(prestamosDTO, Prestamos.class);
         
         switch (prestamosDTO.getTipoPrestamo()) {
@@ -76,9 +76,10 @@ public class PrestamosServicios {
                 prestamosParaAgregar.setTasa_interes(tasaHipotecario);
         }
         prestamosParaAgregar.setCuota(calcularCuota(prestamosParaAgregar));
-        List<Tabla_Amortizacion> creacionTabla = new ArrayList<>();
+        //Ver si el cliente tiene buen nivel de endeudamiento
         
         //Logica para crear tabla de amortizacion
+        List<Tabla_Amortizacion> creacionTabla = new ArrayList<>();
         int cuotasTotales = prestamosDTO.getPlazo()*12;
         //El primer registor
         Tabla_Amortizacion primerRegistro = new Tabla_Amortizacion();
@@ -100,7 +101,9 @@ public class PrestamosServicios {
             BigDecimal anio = new BigDecimal(12.0);
             interes= interes.divide(anio,2,RoundingMode.HALF_UP);
             interes = interes.multiply(registroAnterior.getSaldo());
+            System.out.println(interes.toString());
             BigDecimal capital = prestamosParaAgregar.getCuota().subtract(interes);
+            System.out.println(capital.toString());
             BigDecimal saldo = registroAnterior.getSaldo().subtract(capital);
 
             Tabla_Amortizacion nuevoRegistro = new Tabla_Amortizacion();
@@ -114,8 +117,9 @@ public class PrestamosServicios {
             creacionTabla.add(nuevoRegistro);
         }
         //Agregar tabla a prestamos
-        amortizacionRepositorio.saveAllAndFlush(creacionTabla);
-
+        prestamosParaAgregar.setTabla_amortizacion(creacionTabla);
+        prestamosRepositorio.save(prestamosParaAgregar);
+        
         if (clienteRepositorio.existsById(dni)){
             Cliente cliente = clienteRepositorio.findById(dni).get();
             cliente.getPrestamos().add(prestamosParaAgregar);
@@ -133,7 +137,8 @@ public class PrestamosServicios {
         double r = prestamos.getTasa_interes().doubleValue()/12.0;
         double n = ((double)prestamos.getPlazo())*12.0;
 
-        double calculoCuota = (P*r*Math.pow(1+r, n))/(Math.pow(1+r, n)-1);
+        double calculoCuota = (P*r*(Math.pow(1+r, n)))
+        /(Math.pow(1+r, n)-1);
 
         return new BigDecimal(calculoCuota);
     }
