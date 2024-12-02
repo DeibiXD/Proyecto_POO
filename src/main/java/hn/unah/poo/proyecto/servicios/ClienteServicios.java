@@ -13,7 +13,6 @@ import hn.unah.poo.proyecto.dtos.DireccionDTO;
 import hn.unah.poo.proyecto.dtos.PrestamosDTO;
 import hn.unah.poo.proyecto.modelos.Cliente;
 import hn.unah.poo.proyecto.modelos.Direccion;
-import hn.unah.poo.proyecto.modelos.Prestamos;
 import hn.unah.poo.proyecto.repositorios.ClienteRepositorio;
 import hn.unah.poo.proyecto.repositorios.DireccionRepositorio;
 import hn.unah.poo.proyecto.repositorios.PrestamosRepositorio;
@@ -38,6 +37,7 @@ public class ClienteServicios {
     private PrestamosServicios prestamosServicios;
     
     public String crearCliente(ClienteDTO clienteDTO){  
+
         if(this.clienteRepositorio.existsById(clienteDTO.getDni())){
             return "Ya existe el cliente";
         } else if (
@@ -100,7 +100,7 @@ public class ClienteServicios {
                 prestamosServicios.crearPrestamos(prestamosDTO, cliente.getDni());
             }
             return "Cliente Agregado con direccion y lista de prestamos";
-        } else if (clienteDTO.getDireccionDTO().size()> 2){
+        } else if (clienteDTO.getDireccionDTO()!=null &&clienteDTO.getDireccionDTO().size()> 2){
             return "Un cliente solo puede tener 2 direcciones";
         }
         modelMapper = new ModelMapper();

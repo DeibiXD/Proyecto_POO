@@ -50,13 +50,17 @@ CREATE TABLE tabla_amortizacion (
     capital DECIMAL(14,2),
     saldo DECIMAL(14,2),
     fechaVencimiento DATE,
-    id_tabla_amortizacion INT,
-    PRIMARY KEY (id_tabla_amortizacion)
+    id_tabla_amortizacion INT auto_increment,
+    PRIMARY KEY (id_tabla_amortizacion),
     FOREIGN KEY (idPrestamo) REFERENCES prestamos(idPrestamo) ON DELETE CASCADE
 );
 
+select * From cliente;
+
+select * from cliente_prestamos;
+
 SELECT * FROM direccion;
 
-SELECT * FROM tabla_amortizacion;
+SELECT * FROM prestamos;
 
-RENAME TABLE `proyecto_poo`.`Prestamos` TO `proyecto_poo`.`prestamos`;
+SELECT * FROM tabla_amortizacion;

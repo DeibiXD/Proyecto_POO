@@ -6,7 +6,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +13,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import hn.unah.poo.proyecto.dtos.PrestamosDTO;
+import hn.unah.poo.proyecto.modelos.Cliente;
 import hn.unah.poo.proyecto.modelos.Prestamos;
 import hn.unah.poo.proyecto.modelos.Tabla_Amortizacion;
 import hn.unah.poo.proyecto.repositorios.AmortizacionRepositorio;
 import hn.unah.poo.proyecto.repositorios.ClienteRepositorio;
 import hn.unah.poo.proyecto.repositorios.PrestamosRepositorio;
-import hn.unah.poo.proyecto.modelos.Cliente;
 
 @Service
 public class PrestamosServicios {
@@ -59,7 +58,7 @@ public class PrestamosServicios {
     }
 
     public String crearPrestamos(PrestamosDTO prestamosDTO, String dni) {
-        if(prestamosDTO.getPlazo()>=1 && (nivelEndeudamiento(dni).doubleValue()>0.4)){
+        if(prestamosDTO.getPlazo()>=1 && (nivelEndeudamiento(dni).doubleValue()<0.4)){
         modelMapper = new ModelMapper();
         Prestamos prestamosParaAgregar = modelMapper.map(prestamosDTO, Prestamos.class);
         
@@ -148,12 +147,15 @@ public class PrestamosServicios {
 
     public BigDecimal nivelEndeudamiento(String dni){
         List<Prestamos> listaDePrestamosAsociadasAlCliente = prestamosRepositorio.findPrestamosByClienteDni(dni);
+        if (listaDePrestamosAsociadasAlCliente==null){
+            return BigDecimal.ZERO;
+        }
         BigDecimal totalEgresos = BigDecimal.ZERO;
         Cliente clienteParaCalcularSueldo= clienteRepositorio.findById(dni).orElseThrow(() -> new IllegalArgumentException("No existe el Cliente"));
         for (Prestamos prestamosAsociados : listaDePrestamosAsociadasAlCliente) {
             totalEgresos = totalEgresos.add(prestamosAsociados.getCuota());
         }
-        BigDecimal nivelEndeudamiento = totalEgresos.divide(clienteParaCalcularSueldo.getSueldo());
+        BigDecimal nivelEndeudamiento = totalEgresos.divide(clienteParaCalcularSueldo.getSueldo(),2,RoundingMode.HALF_UP);
 
         return nivelEndeudamiento;
     }
