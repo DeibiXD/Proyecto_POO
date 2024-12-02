@@ -59,7 +59,7 @@ public class Prestamos {
     @OneToMany(mappedBy = "prestamos",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Tabla_Amortizacion> tabla_amortizacion;
 
-    @ManyToMany(mappedBy = "prestamos")
+    @ManyToMany(mappedBy = "prestamos",cascade =CascadeType.ALL)
     @JsonIgnoreProperties({"prestamos"})
     private List<Cliente> clientes;
 }

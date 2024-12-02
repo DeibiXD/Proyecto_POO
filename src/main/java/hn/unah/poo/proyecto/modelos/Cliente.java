@@ -42,10 +42,10 @@ public class Cliente {
 
     private BigDecimal sueldo;
 
-    @OneToMany(mappedBy = "cliente")
+    @OneToMany(mappedBy = "cliente",cascade = CascadeType.ALL)
     private List<Direccion> direccion;
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
         name = "cliente_prestamos",
         joinColumns = { @JoinColumn(name="dni")},

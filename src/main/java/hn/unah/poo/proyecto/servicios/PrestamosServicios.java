@@ -59,7 +59,7 @@ public class PrestamosServicios {
     }
 
     public String crearPrestamos(PrestamosDTO prestamosDTO, String dni) {
-        if(prestamosDTO.getPlazo()>=1){
+        if(prestamosDTO.getPlazo()>=1 && (nivelEndeudamiento(dni).doubleValue()>0.4)){
         modelMapper = new ModelMapper();
         Prestamos prestamosParaAgregar = modelMapper.map(prestamosDTO, Prestamos.class);
         
@@ -122,6 +122,9 @@ public class PrestamosServicios {
         
         if (clienteRepositorio.existsById(dni)){
             Cliente cliente = clienteRepositorio.findById(dni).get();
+            if(cliente.getPrestamos()==null){
+                cliente.setPrestamos(new ArrayList<>());
+            }
             cliente.getPrestamos().add(prestamosParaAgregar);
             clienteRepositorio.save(cliente);
         }
@@ -143,7 +146,7 @@ public class PrestamosServicios {
         return new BigDecimal(calculoCuota);
     }
 
-    public BigDecimal NivelEndeudamiento(String dni, List<Tabla_Amortizacion> tabla_Amortizacion){
+    public BigDecimal nivelEndeudamiento(String dni){
         List<Prestamos> listaDePrestamosAsociadasAlCliente = prestamosRepositorio.findPrestamosByClienteDni(dni);
         BigDecimal totalEgresos = BigDecimal.ZERO;
         Cliente clienteParaCalcularSueldo= clienteRepositorio.findById(dni).orElseThrow(() -> new IllegalArgumentException("No existe el Cliente"));
@@ -159,6 +162,9 @@ public class PrestamosServicios {
         if (clienteRepositorio.existsById(dni) && prestamosRepositorio.existsById(idPrestamo)){
             Cliente cliente = clienteRepositorio.findById(dni).get();
             Prestamos prestamos = prestamosRepositorio.findById(idPrestamo).get();
+            if (cliente.getPrestamos()==null){
+                cliente.setPrestamos(new ArrayList<>());
+            }
             cliente.getPrestamos().add(prestamos);
             clienteRepositorio.save(cliente);
             return "Se agrego prestamo a cliente";

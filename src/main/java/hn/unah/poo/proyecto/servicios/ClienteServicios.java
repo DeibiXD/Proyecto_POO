@@ -33,6 +33,9 @@ public class ClienteServicios {
 
     @Autowired
     private PrestamosRepositorio prestamosRepositorio;
+
+    @Autowired
+    private PrestamosServicios prestamosServicios;
     
     public String crearCliente(ClienteDTO clienteDTO){  
         if(this.clienteRepositorio.existsById(clienteDTO.getDni())){
@@ -91,20 +94,11 @@ public class ClienteServicios {
                 direccionFinal.setCliente(cliente);
                 direccion.add(direccionFinal);
             }
-        
-        direccionRepositorio.saveAllAndFlush(direccion);
-
-            List<Prestamos> listaPrestamos = new ArrayList<>();
-
-            for (PrestamosDTO prestamosDTO : clienteDTO.getPrestamosDTO()) {
-                modelMapper = new ModelMapper();
-                listaPrestamos.add(modelMapper.map(prestamosDTO, Prestamos.class));
-
-            }
-            cliente.setPrestamos(listaPrestamos);
-            prestamosRepositorio.saveAllAndFlush(listaPrestamos);
+            cliente.setDireccion(direccion);
             clienteRepositorio.saveAndFlush(cliente);
-
+            for (PrestamosDTO prestamosDTO : clienteDTO.getPrestamosDTO()) {
+                prestamosServicios.crearPrestamos(prestamosDTO, cliente.getDni());
+            }
             return "Cliente Agregado con direccion y lista de prestamos";
         } else if (clienteDTO.getDireccionDTO().size()> 2){
             return "Un cliente solo puede tener 2 direcciones";
